@@ -1,1 +1,39 @@
-<p>form works!</p>
+<div class="row">
+  <div class="col-6">
+    <form>
+      <div class="form-group">
+        <label for="firstName">Firs name:</label>
+        <input id="firstName" type="text" class="form-control" name="first" required
+               [(ngModel)]="model.firstName">
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last name:</label>
+        <input id="lastName" type="text" class="form-control" name="lastName" required
+               [(ngModel)]="model.lastName">
+      </div>
+      <div class="form-group">
+        <label for="birth">Birthday:</label>
+        <input id="birth" type="date" class="form-control" name="birthday" required
+               [(ngModel)]="model.dateOfBirth">
+      </div>
+      <div class="form-group">
+        <label for="frameworks">Technology:</label>
+        <select name="frameworks" id="frameworks" [(ngModel)]="frameworks" class="form-control">
+          <option *ngFor="let frame of frameworks" [value]="frame">
+            {{frame}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="version">Version:</label>
+        <input id="version" type="text" class="form-control" name="version" required
+               [(ngModel)]="model.frameworkVersion">
+      </div>
+      <div class="form-group">
+        <button class="btn btn-info">Send</button>
+      </div>
+    </form>
+
+    <p>{{diagnostic}}</p>
+  </div>
+</div>
