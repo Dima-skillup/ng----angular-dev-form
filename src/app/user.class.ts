@@ -3,9 +3,10 @@ export class User {
     public id: number,
     public firstName: string,
     public lastName: string,
+    public email: string,
     public dateOfBirth: string,
     public frameworks: string,
-    public frameworkVersion?: string,
-    public hobby?: string
+    public frameworkVersions: string,
+    public hobby: string
   ) { }
 }

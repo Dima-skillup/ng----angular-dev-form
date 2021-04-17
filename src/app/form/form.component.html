@@ -1,37 +1,104 @@
 <div class="row">
   <div class="col-6">
-    <form>
+    <form [formGroup]="userForm"  (ngSubmit)="onSubmit()" novalidate>
       <div class="form-group">
-        <label for="firstName">Firs name:</label>
-        <input id="firstName" type="text" class="form-control" name="first" required
-               [(ngModel)]="model.firstName">
+        <label for="firstName">First name:</label>
+        <input id="firstName" type="text" class="form-control" formControlName="firstName" placeholder="first name">
+        <div class="alert alert-danger"
+             *ngIf="formErrors.firstName">
+          {{formErrors.firstName}}
+        </div>
       </div>
+
       <div class="form-group">
         <label for="lastName">Last name:</label>
-        <input id="lastName" type="text" class="form-control" name="lastName" required
-               [(ngModel)]="model.lastName">
+        <input id="lastName" type="text" class="form-control" formControlName="lastName" placeholder="last name">
+        <div class="alert alert-danger"
+             *ngIf="formErrors.lastName">
+           {{formErrors.lastName}}
+        </div>
       </div>
       <div class="form-group">
-        <label for="birth">Birthday:</label>
-        <input id="birth" type="date" class="form-control" name="birthday" required
-               [(ngModel)]="model.dateOfBirth">
+        <label for="email">Email:</label>
+        <input id="email" type="text" class="form-control" formControlName="email" placeholder="email">
+        <div class="alert alert-danger"
+             *ngIf="formErrors.email">
+          {{formErrors.email}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="dateOfBirth">Birthday:</label>
+        <input id="dateOfBirth" type="date" class="form-control" formControlName="dateOfBirth">
+        <div class="alert alert-danger" *ngIf="formErrors.dateOfBirth">
+          {{formErrors.dateOfBirth}}
+        </div>
       </div>
       <div class="form-group">
         <label for="frameworks">Technology:</label>
-        <select name="frameworks" id="frameworks" [(ngModel)]="frameworks" class="form-control">
+        <select  id="frameworks"  class="form-control" formControlName="frameworks">
+          <option [value]="null" selected disabled>Select framework</option>
           <option *ngFor="let frame of frameworks" [value]="frame">
             {{frame}}
           </option>
         </select>
+        <div class="alert alert-danger"
+             *ngIf="formErrors.frameworks">
+          {{formErrors.frameworks}}
+        </div>
       </div>
       <div class="form-group">
         <label for="version">Version:</label>
-        <input id="version" type="text" class="form-control" name="version" required
-               [(ngModel)]="model.frameworkVersion">
+        <select  id="version"  class="form-control" formControlName="frameworkVersions">
+          <option [value]="null" selected disabled>Select version</option>
+          <option *ngFor="let version of frameworkVersions" [value]="version">
+            {{version}}
+          </option>
+          <div class="alert alert-danger"
+               *ngIf="formErrors.frameworkVersions">
+            {{formErrors.frameworkVersions}}
+          </div>
+        </select>
       </div>
+
       <div class="form-group">
-        <button class="btn btn-info">Send</button>
+        <button class="btn btn-info" [disabled]="userForm.invalid">Send</button>
       </div>
+<!--      <div class="form-group">-->
+<!--        <label for="lastName">Last name:</label>-->
+<!--        <input id="lastName" type="text" class="form-control" name="lastName" required-->
+<!--               minlength="4"  maxlength="10"-->
+<!--               [(ngModel)]="model.lastName">-->
+<!--        <div class="alert alert-danger" *ngIf="formErrors.lastName">-->
+<!--          {{formErrors.lastName}}-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="dateOfBirth">Birthday:</label>-->
+<!--        <input id="dateOfBirth" type="date" class="form-control" name="dateOfBirth" required-->
+<!--               [(ngModel)]="model.dateOfBirth">-->
+<!--        <div class="alert alert-danger" *ngIf="formErrors.dateOfBirth">-->
+<!--          {{formErrors.dateOfBirth}}-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="frameworks">Technology:</label>-->
+<!--        <select name="frameworks" id="frameworks" [(ngModel)]="model.frameworks" class="form-control">-->
+<!--          <option *ngFor="let frame of frameworks" [value]="frame">-->
+<!--            {{frame}}-->
+<!--          </option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="versions">Version:</label>-->
+<!--        <select name="versions" id="versions" [(ngModel)]="model.frameworkVersions" class="form-control">-->
+<!--          <option *ngFor="let version of  frameworkVersions" [value]="version">-->
+<!--            {{version}}-->
+<!--          </option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <button class="btn btn-info" [disabled]="userForm.form.invalid">Send</button>-->
+<!--      </div>-->
     </form>
 
     <p>{{diagnostic}}</p>
