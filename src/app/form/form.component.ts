@@ -1,7 +1,8 @@
 import {Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {User} from '../user.class';
-import {emailValidator} from '../custom-validators';
+import { observableMailValidator} from '../custom-validators';
+import {FORM_ERRORS, FORM_PLACEHOLDER, FORM_SUCCESS, FRAMEWORKS, FRAMEWORKS_VERSION, VALIDATION_MESSAGES} from '../form-data';
 
 
 @Component({
@@ -12,41 +13,22 @@ import {emailValidator} from '../custom-validators';
 export class FormComponent implements OnInit {
   userForm: FormGroup;
   user: User = new User(1, null, null, null, null, null, null, null);
-  frameworks: string[] = ['angular', 'react', 'vue'];
-  frameworkVersions: string[] = ['1.1.1', '1.2.1', '1.3.3', '2.1.2', '3.2.4', '4.3.1', '3.3.1', '5.2.1', '5.1.3'];
 
-  formErrors = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    dateOfBirth: '',
-    frameworks: '',
-    frameworkVersions: ''
-  };
+  frameworks = FRAMEWORKS;
+  frameworkVersions = FRAMEWORKS_VERSION;
+  placeholders = FORM_PLACEHOLDER;
+  formErrors = FORM_ERRORS;
+  formSuccess = FORM_SUCCESS;
+  validationMessage = VALIDATION_MESSAGES;
 
-  validationMessage = {
-    firstName: {
-      required: 'Имя обязательно',
-      minlength: 'Имя должно содержать не менее 4 символов',
-      maxlength: 'Имя должно содержать не более 15 символов'
-    },
-    lastName: {
-      required: 'Фамилия обязательна',
-      minlength: 'Фамилия должно содержать не менее 4 символов',
-      maxlength: 'Фамилия должна содержать не более 25 символов'
-    },
-    email: {
-      required: 'Email обязателен',
-      emailValidator: 'Неправильный формат email адреса'
-    },
-    dateOfBirth: {
-      required: 'Дата обязательна'
-    },
-    frameworks: '',
+  firstName: AbstractControl;
+  lastName: AbstractControl;
+  dateOfBirth: AbstractControl;
+  email: AbstractControl;
+  framework: AbstractControl;
+  frameworkVersion: AbstractControl;
+  hobby: AbstractControl;
 
-    frameworkVersions: '',
-
-  };
 
   constructor(private fb: FormBuilder) {
   }
@@ -59,14 +41,25 @@ export class FormComponent implements OnInit {
     this.userForm = this.fb.group({
       firstName: [this.user.firstName, [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],
       lastName: [ this.user.lastName, [Validators.required, Validators.minLength(7), Validators.maxLength(25)]],
-      email: [ this.user.email, [Validators.required,  emailValidator]],
+      email: [ this.user.email, [Validators.required], [observableMailValidator]],
       dateOfBirth: [ this.user.dateOfBirth, Validators.required],
-      frameworks: [ this.user.frameworks, Validators.required],
-      frameworkVersions: [ this.user.frameworkVersions, Validators.required],
+      framework: [ this.user.framework, Validators.required],
+      frameworkVersion: [ this.user.frameworkVersion, Validators.required],
       hobby: [ this.user.hobby, Validators.required]
     });
     this.userForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.createControls();
 
+  }
+
+  createControls(): void {
+    this.firstName = this.userForm.controls.firstName;
+    this.lastName = this.userForm.controls.lastName;
+    this.dateOfBirth = this.userForm.controls.dateOfBirth;
+    this.email = this.userForm.controls.email;
+    this.framework = this.userForm.controls.framework;
+    this.frameworkVersion = this.userForm.controls.frameworkVersion;
+    this.hobby = this.userForm.controls.hobby;
   }
 
   onSubmit(): void {
@@ -91,7 +84,5 @@ export class FormComponent implements OnInit {
       }
     }
   }
-  get diagnostic(): string {
-    return JSON.stringify(this.user);
-  }
+
 }

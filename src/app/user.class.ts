@@ -5,8 +5,8 @@ export class User {
     public lastName: string,
     public email: string,
     public dateOfBirth: string,
-    public frameworks: string,
-    public frameworkVersions: string,
-    public hobby: string
+    public framework: string[],
+    public frameworkVersion: string,
+    public hobby: string[]
   ) { }
 }

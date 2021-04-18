@@ -2,105 +2,138 @@
   <div class="col-6">
     <form [formGroup]="userForm"  (ngSubmit)="onSubmit()" novalidate>
       <div class="form-group">
-        <label for="firstName">First name:</label>
-        <input id="firstName" type="text" class="form-control" formControlName="firstName" placeholder="first name">
-        <div class="alert alert-danger"
-             *ngIf="formErrors.firstName">
+        <label for="firstName">First name: <span class="text-danger">*</span></label>
+        <input id="firstName" type="text" class="form-control" formControlName="firstName" placeholder="{{placeholders.firstName}}"
+               (blur)="onValueChanged()"
+                [ngClass]="{
+                    'is-valid':  firstName.valid,
+                    'is-invalid':firstName.invalid && (firstName.touched || firstName.dirty)}">
+
+        <div class="valid-feedback"
+             *ngIf="firstName.valid">
+          {{formSuccess.firstName}}
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="firstName.invalid && (firstName.touched || firstName.dirty)">
           {{formErrors.firstName}}
         </div>
       </div>
 
       <div class="form-group">
-        <label for="lastName">Last name:</label>
-        <input id="lastName" type="text" class="form-control" formControlName="lastName" placeholder="last name">
-        <div class="alert alert-danger"
-             *ngIf="formErrors.lastName">
-           {{formErrors.lastName}}
+        <label for="lastName">Last name: <span class="text-danger">*</span></label>
+        <input id="lastName" type="text" class="form-control" formControlName="lastName" placeholder="{{placeholders.lastName}}"
+               (blur)="onValueChanged()"
+               [ngClass]="{
+                    'is-valid':  lastName.valid,
+                    'is-invalid': lastName.invalid &&  (lastName.touched || lastName.dirty)}">
+        <div class="valid-feedback"
+             *ngIf="lastName.valid">
+          {{formSuccess.lastName}}
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="lastName.invalid &&  (lastName.touched || lastName.dirty)">
+          {{formErrors.lastName}}
         </div>
       </div>
       <div class="form-group">
-        <label for="email">Email:</label>
-        <input id="email" type="text" class="form-control" formControlName="email" placeholder="email">
-        <div class="alert alert-danger"
-             *ngIf="formErrors.email">
-          {{formErrors.email}}
+        <label for="email">Email:<span class="text-danger">*</span></label>
+        <input id="email" type="text" class="form-control"
+               placeholder="{{placeholders.email}}"
+               formControlName="email"
+               (blur)="onValueChanged()"
+               [ngClass]="{
+                'is-valid': email.valid,
+                'is-invalid': email.invalid &&  (email.touched || email.dirty)
+               }">
+        <span *ngIf="email.pending"><img class="loading" src="assets/Rolling-1s-200px.svg" alt=""></span>
+        <div class="valid-feedback"  *ngIf="email.valid">{{formSuccess.email}}</div>
+        <div class="invalid-feedback" *ngIf="email.invalid &&  (email.touched || email.dirty)">
+          <div *ngIf="formErrors.email">{{formErrors.email}}</div>
+          <div *ngIf="!formErrors.email && email.errors?.emailNotAllowed">{{validationMessage.email.emailNotAllowed}}</div>
         </div>
+        <div *ngIf="email.pending" class="text-muted">{{validationMessage.email.pending}}</div>
       </div>
       <div class="form-group">
-        <label for="dateOfBirth">Birthday:</label>
-        <input id="dateOfBirth" type="date" class="form-control" formControlName="dateOfBirth">
-        <div class="alert alert-danger" *ngIf="formErrors.dateOfBirth">
+        <label for="dateOfBirth">Birthday: <span class="text-danger">*</span></label>
+        <input id="dateOfBirth" type="date" class="form-control" formControlName="dateOfBirth"
+               (blur)="onValueChanged()"
+               [ngClass]="{
+                    'is-valid': dateOfBirth.valid,
+                    'is-invalid':  dateOfBirth.invalid && (dateOfBirth.touched || dateOfBirth.dirty)}">
+        <div class="valid-feedback"
+             *ngIf="dateOfBirth.valid">
+          {{formSuccess.dateOfBirth}}
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="dateOfBirth.invalid && (dateOfBirth.touched || dateOfBirth.dirty)">
           {{formErrors.dateOfBirth}}
         </div>
       </div>
       <div class="form-group">
-        <label for="frameworks">Technology:</label>
-        <select  id="frameworks"  class="form-control" formControlName="frameworks">
-          <option [value]="null" selected disabled>Select framework</option>
+        <label for="frameworks">Technology: <span class="text-danger">*</span></label>
+
+        <select  id="frameworks"  class="custom-select" formControlName="framework"
+                 (blur)="onValueChanged()"
+                 [ngClass]="{
+                    'is-valid':  framework.valid,
+                    'is-invalid': framework.invalid &&  framework.touched }">
+          <option [value]="null" selected disabled>{{placeholders.framework}}</option>
           <option *ngFor="let frame of frameworks" [value]="frame">
             {{frame}}
           </option>
         </select>
-        <div class="alert alert-danger"
-             *ngIf="formErrors.frameworks">
-          {{formErrors.frameworks}}
+        <div class="valid-feedback"
+             *ngIf="framework.valid">
+          {{formSuccess.framework}}
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="framework.invalid && framework.touched">
+          {{formErrors.framework}}
         </div>
       </div>
       <div class="form-group">
-        <label for="version">Version:</label>
-        <select  id="version"  class="form-control" formControlName="frameworkVersions">
-          <option [value]="null" selected disabled>Select version</option>
-          <option *ngFor="let version of frameworkVersions" [value]="version">
+        <label for="version">Version: <span class="text-danger">*</span></label>
+        <select  id="version"  class="form-control" formControlName="frameworkVersion"
+                 (blur)="onValueChanged()"
+                 [ngClass]="{
+                    'is-valid':  frameworkVersion.valid,
+                    'is-invalid': frameworkVersion.invalid &&  frameworkVersion.touched}"
+                 >
+          <option [value]="null" selected disabled>{{placeholders.frameworkVersion}}</option>
+          <option *ngFor="let version of frameworkVersions" [value]="version" [disabled]="framework.invalid">
             {{version}}
           </option>
-          <div class="alert alert-danger"
-               *ngIf="formErrors.frameworkVersions">
-            {{formErrors.frameworkVersions}}
-          </div>
         </select>
+        <div class="valid-feedback"
+             *ngIf="frameworkVersion.valid">
+          {{formSuccess.frameworkVersion}}
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="frameworkVersion.invalid &&  (frameworkVersion.touched || frameworkVersion.dirty)">
+          {{formErrors.frameworkVersion}}
+        </div>
       </div>
 
       <div class="form-group">
-        <button class="btn btn-info" [disabled]="userForm.invalid">Send</button>
+        <label for="hobby">Хобби<span class="text-danger">*</span></label>
+        <input id="hobby" type="text" class="form-control" formControlName="hobby" placeholder="{{placeholders.hobby}}"
+               (blur)="onValueChanged()"
+               [ngClass]="{
+                    'is-valid':  hobby.valid,
+                    'is-invalid': hobby.invalid &&  (hobby.touched || hobby.dirty)}">
+        <div class="valid-feedback"
+             *ngIf="hobby.valid">
+          {{formSuccess.hobby}}
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="hobby.invalid &&  (hobby.touched || hobby.dirty)">
+          {{formErrors.hobby}}
+        </div>
       </div>
-<!--      <div class="form-group">-->
-<!--        <label for="lastName">Last name:</label>-->
-<!--        <input id="lastName" type="text" class="form-control" name="lastName" required-->
-<!--               minlength="4"  maxlength="10"-->
-<!--               [(ngModel)]="model.lastName">-->
-<!--        <div class="alert alert-danger" *ngIf="formErrors.lastName">-->
-<!--          {{formErrors.lastName}}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <label for="dateOfBirth">Birthday:</label>-->
-<!--        <input id="dateOfBirth" type="date" class="form-control" name="dateOfBirth" required-->
-<!--               [(ngModel)]="model.dateOfBirth">-->
-<!--        <div class="alert alert-danger" *ngIf="formErrors.dateOfBirth">-->
-<!--          {{formErrors.dateOfBirth}}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <label for="frameworks">Technology:</label>-->
-<!--        <select name="frameworks" id="frameworks" [(ngModel)]="model.frameworks" class="form-control">-->
-<!--          <option *ngFor="let frame of frameworks" [value]="frame">-->
-<!--            {{frame}}-->
-<!--          </option>-->
-<!--        </select>-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <label for="versions">Version:</label>-->
-<!--        <select name="versions" id="versions" [(ngModel)]="model.frameworkVersions" class="form-control">-->
-<!--          <option *ngFor="let version of  frameworkVersions" [value]="version">-->
-<!--            {{version}}-->
-<!--          </option>-->
-<!--        </select>-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <button class="btn btn-info" [disabled]="userForm.form.invalid">Send</button>-->
-<!--      </div>-->
+      <div class="form-group">
+        <button class="btn btn-info" [disabled]="userForm.invalid">Отправить</button>
+      </div>
     </form>
 
-    <p>{{diagnostic}}</p>
   </div>
 </div>
